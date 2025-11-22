@@ -4,569 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Motor Master</title>
+  
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* --- Reset y básicos --- */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: Arial, sans-serif; background:#000; color:#fff; overflow-x:hidden; padding:20px; }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #000;
-            color: #fff;
-            overflow-x: hidden;
-            padding: 20px;
-        }
-
-        /* LED Border Effect para HEADER */
-        .led-header-frame {
-            position: relative;
-            margin: 20px auto 40px;
-            max-width: 1200px;
-            padding: 30px;
-        }
-
+        /* --- Header LED y Logo --- */
+        .led-header-frame { position: relative; margin:20px auto 40px; max-width:1200px; padding:30px; }
         .header-led-border {
-            position: absolute;
-            border: 3px solid transparent;
+            position:absolute;
+            border:3px solid transparent;
             border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff) 1;
             animation: ledGlow 2s linear infinite;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8),
-                        inset 0 0 20px rgba(255, 0, 255, 0.4);
+            top:-10px; left:-10px; right:-10px; bottom:-10px;
+            border-radius:20px;
+            box-shadow:0 0 30px rgba(255,0,255,0.8), inset 0 0 20px rgba(255,0,255,0.4);
+            z-index:1;
         }
+        @keyframes ledGlow { 0%,100%{border-image-source:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff00ff);} 
+                             25%{border-image-source:linear-gradient(45deg,#00ffff,#ffff00,#ff00ff,#00ffff);} 
+                             50%{border-image-source:linear-gradient(45deg,#ffff00,#ff00ff,#00ffff,#ffff00);} 
+                             75%{border-image-source:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00,#ff00ff);} }
 
-        @keyframes ledGlow {
-            0% { border-image-source: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff); }
-            25% { border-image-source: linear-gradient(45deg, #00ffff, #ffff00, #ff00ff, #00ffff); }
-            50% { border-image-source: linear-gradient(45deg, #ffff00, #ff00ff, #00ffff, #ffff00); }
-            75% { border-image-source: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff); }
-            100% { border-image-source: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff); }
-        }
-
-        .header-content {
-            text-align: center;
-            position: relative;
-        }
-
-        /* Logo grande y redondo */
+        .header-content { text-align:center; position:relative; z-index:2; }
         .logo-container {
-            margin: 0 auto 20px;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid #00ffff;
-            box-shadow: 0 0 20px #00ffff, 0 0 40px rgba(0, 255, 255, 0.5);
-            position: relative;
-            z-index: 10;
-            background: #1a1a1a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin:0 auto 20px;
+            width:150px; height:150px;
+            border-radius:50%;
+            overflow:hidden;
+            border:3px solid #00ffff;
+            box-shadow:0 0 20px #00ffff,0 0 40px rgba(0,255,255,0.5);
+            background:#1a1a1a;
+            display:flex; align-items:center; justify-content:center;
         }
-
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .logo-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #ff00ff, #00ffff);
-            color: #000;
-            font-weight: bold;
-            font-size: 1.2em;
-            text-align: center;
-            padding: 10px;
-        }
+        .logo-container img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
 
         .header-content h1 {
-            font-size: 3rem;
-            font-weight: 300;
-            letter-spacing: 6px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite;
+            font-size:3rem; font-weight:300; letter-spacing:6px; margin-bottom:15px;
+            text-transform:uppercase;
+            background:linear-gradient(45deg,#ff00ff,#00ffff,#ffff00);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-size:200% 200%;
+            animation:gradientShift 3s ease infinite;
         }
+        @keyframes gradientShift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .header-content p {
-            font-size: 1.2rem;
-            margin-bottom: 0;
-            color: #ccc;
-            letter-spacing: 2px;
-        }
-
-        .user-info {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
+        .user-info { position:absolute; top:20px; right:20px; display:flex; align-items:center; gap:15px; z-index:3; }
         .home-btn, .logout-btn {
-            background: transparent;
-            color: #00ffff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 1px solid #00ffff;
-            font-weight: 500;
-            font-size: 0.9em;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            background:transparent; color:#00ffff; padding:8px 16px; border-radius:20px;
+            text-decoration:none; transition:all 0.3s ease; border:1px solid #00ffff; font-weight:500;
+            display:flex; align-items:center; gap:5px; z-index:3;
         }
+        .home-btn:hover { background:#ffff00; color:#000; box-shadow:0 0 20px #ffff00; border-color:#ffff00; }
+        .logout-btn:hover { background:#00ffff; color:#000; box-shadow:0 0 20px #00ffff; }
 
-        .home-btn:hover {
-            background: #ffff00;
-            color: #000;
-            box-shadow: 0 0 20px #ffff00;
-            border-color: #ffff00;
-        }
-
-        .logout-btn:hover {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 20px #00ffff;
-        }
-
-        .main-nav {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-
+        .main-nav { display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin-top:30px; z-index:2; }
         .nav-btn {
-            background: transparent;
-            color: #00ffff;
-            padding: 15px 30px;
-            border: 2px solid #00ffff;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            overflow: hidden;
+            background:transparent; color:#00ffff; padding:15px 30px; border:2px solid #00ffff;
+            border-radius:10px; text-decoration:none; transition:all 0.3s ease; font-weight:500;
+            display:flex; align-items:center; gap:10px; position:relative; overflow:hidden;
         }
-
         .nav-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
+            content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+            background:linear-gradient(90deg, transparent, rgba(0,255,255,0.2), transparent);
+            transition:left 0.5s ease;
         }
+        .nav-btn:hover::before { left:100%; }
+        .nav-btn:hover { background:#00ffff; color:#000; box-shadow:0 0 25px #00ffff; transform:translateY(-3px); }
 
-        .nav-btn:hover::before {
-            left: 100%;
-        }
+        /* --- Contenido y bloques --- */
+        .content { padding:40px 20px; position:relative; z-index:2; }
 
-        .nav-btn:hover {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 25px #00ffff;
-            transform: translateY(-3px);
-        }
+        /* --- Partículas flotantes (detrás) --- */
+        .particles { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
 
-        .btn-icon {
-            font-size: 1.2em;
-        }
+        /* --- Footer --- */
+        .footer { text-align:center; padding:30px 20px; color:#666; border-top:1px solid #333; }
 
-        .btn-text {
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        /* Contenido principal */
-        .content {
-            padding: 40px 20px;
-        }
-
-        /* ========== ESTILOS COMUNES CON LED ========== */
-        .welcome-section, .features-section, .about-section {
-            background: #1a1a1a;
-            border-radius: 15px;
-            padding: 30px;
-            border: 2px solid #333;
-            position: relative;
-            margin-bottom: 30px;
-        }
-
-        .section-led-border {
-            position: absolute;
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff) 1;
-            animation: ledGlow 3s linear infinite;
-            top: -8px;
-            left: -8px;
-            right: -8px;
-            bottom: -8px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5),
-                        inset 0 0 10px rgba(0, 255, 255, 0.2);
-        }
-
-        .welcome-section h2, .features-section h2, .about-section h2 {
-            color: #ffffff; /* Cambiado a blanco como solicitaste */
-            margin-bottom: 25px;
-            font-size: 1.8em;
-            border-bottom: 2px solid #ff00ff;
-            padding-bottom: 10px;
-            text-align: center;
-        }
-
-        .welcome-section p, .about-section p {
-            color: #ccc;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .btn-crear {
-            background: transparent;
-            color: #ff00ff;
-            padding: 12px 25px;
-            border: 1px solid #ff00ff;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-crear:hover {
-            background: #ff00ff;
-            color: #000;
-            box-shadow: 0 0 20px #ff00ff;
-            transform: translateY(-2px);
-        }
-
-        /* ========== ESTILOS CARACTERÍSTICAS ========== */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .feature-card {
-            background: #2a2a2a;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #444;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: #00ffff;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-        }
-
-        .feature-icon {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-        }
-
-        .feature-title {
-            color: #ff00ff;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .feature-description {
-            color: #ccc;
-            font-size: 0.9em;
-            line-height: 1.5;
-        }
-
-        /* ========== ESTILOS BOTONES ACCIONES ========== */
-        .actions-cell {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-
-        .btn-editar, .btn-borrar {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85em;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn-editar {
-            background: transparent;
-            color: #00ffff;
-            border: 1px solid #00ffff;
-        }
-
-        .btn-editar:hover {
-            background: #00ffff;
-            color: #000;
-            box-shadow: 0 0 15px #00ffff;
-            transform: translateY(-2px);
-        }
-
-        .btn-borrar {
-            background: transparent;
-            color: #ff4444;
-            border: 1px solid #ff4444;
-        }
-
-        .btn-borrar:hover {
-            background: #ff4444;
-            color: #000;
-            box-shadow: 0 0 15px #ff4444;
-            transform: translateY(-2px);
-        }
-
-        /* ========== ESTILOS FORMULARIOS ========== */
-        .form-container {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #333;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #00ffff;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            border-radius: 8px;
-            font-size: 1em;
-            color: #fff;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #00ffff;
-            box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.1);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            justify-content: center;
-        }
-
-        .btn-guardar, .btn-cancelar {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .btn-guardar {
-            background: transparent;
-            color: #00ff00;
-            border: 1px solid #00ff00;
-        }
-
-        .btn-guardar:hover {
-            background: #00ff00;
-            color: #000;
-            box-shadow: 0 0 20px #00ff00;
-            transform: translateY(-2px);
-        }
-
-        .btn-cancelar {
-            background: transparent;
-            color: #ff4444;
-            border: 1px solid #ff4444;
-        }
-
-        .btn-cancelar:hover {
-            background: #ff4444;
-            color: #000;
-            box-shadow: 0 0 20px #ff4444;
-            transform: translateY(-2px);
-        }
-
-        /* ========== ESTILOS ELIMINACIÓN ========== */
-        .delete-confirm {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid #ff4444;
-            text-align: center;
-        }
-
-        .delete-confirm p {
-            font-size: 1.2em;
-            margin-bottom: 25px;
-            color: #ccc;
-        }
-
-        /* ========== ESTILOS MENSAJES ========== */
-        .empty-message {
-            text-align: center;
-            color: #ff00ff;
-            font-size: 1.2em;
-            padding: 40px;
-            background: #2a1a2a;
-            border-radius: 12px;
-            border: 2px dashed #ff00ff;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 30px 20px;
-            color: #666;
-            border-top: 1px solid #333;
-        }
-
-        /* Floating Particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #ff00ff;
-            border-radius: 50%;
-            animation: float 6s infinite linear;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
-        }
-        .logo-container {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            overflow: hidden;
-            position: relative; /* importante para posicionar la imagen */
-            background-color: #f0f0f0; /* opcional */
-        }
-
-        .logo-container img {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(1.5); /* tamaño fijo */
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1; /* detrás del contenedor */
-        }
-
-        /* ========== RESPONSIVE ========== */
-        @media (max-width: 768px) {
-            .content {
-                padding: 20px;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .actions-cell {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .main-nav {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .nav-btn {
-                width: 200px;
-                text-align: center;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .btn-crear, .btn-guardar, .btn-cancelar {
-                width: 100%;
-                text-align: center;
-            }
-
-            .user-info {
-                position: static;
-                justify-content: center;
-                margin-bottom: 15px;
-                flex-wrap: wrap;
-            }
-
-            .logo-container {
-                width: 120px;
-                height: 120px;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Floating Particles -->
+    {% load static %}
+    <!-- Partículas flotantes -->
     <div class="particles" id="particles"></div>
 
     <!-- Header con LED -->
@@ -574,86 +95,48 @@
         <div class="header-led-border"></div>
         <div class="header-content">
             <div class="user-info">
-                <a href="#" class="home-btn">
-                    <span>🏠</span> Inicio
-                </a>
-                <a href="#" class="logout-btn">
-                    <span>🚪</span> Cerrar Sesión
-                </a>
+                <a href="#" class="home-btn">🏠 Inicio</a>
+                <a href="#" class="logout-btn">🚪 Cerrar Sesión</a>
             </div>
-            
-            <!-- Logo grande y redondo -->
             <div class="logo-container">
-               
-                <!-- Si tienes una imagen, usa esta línea: -->
-                <img src="logo.jpg" alt="Motor Master"> 
+             <img src="{% static 'images/logo.jpg' %}" alt="Motor Master">
             </div>
-            
             <h1>MOTOR MASTER</h1>
             <p>Sistema de Gestión</p>
             <nav class="main-nav">
-                <a href="#" class="nav-btn">
-                    <span class="btn-icon">👥</span>
-                    <span class="btn-text">Clientes</span>
-                </a>
-                <a href="#" class="nav-btn">
-                    <span class="btn-icon">🏪</span>
-                    <span class="btn-text">Tiendas</span>
-                </a>
-                <a href="#" class="nav-btn">
-                    <span class="btn-icon">🛒</span>
-                    <span class="btn-text">Compras</span>
-                </a>
-                <a href="#" class="nav-btn">
-                    <span class="btn-icon">📊</span>
-                    <span class="btn-text">Reportes</span>
-                </a>
+                <a href="{% url 'lista_clientes' %}" class="nav-btn">👥 Clientes</a>
+                <a href="#" class="nav-btn">🏪 Tiendas</a>
+                <a href="#" class="nav-btn">🛒 Compras</a>
+                <a href="#" class="nav-btn">📊 Reportes</a>
             </nav>
         </div>
     </div>
-    
+
+    <!-- Contenido principal -->
     <div class="content">
-       
         {% block content %}
-
         {% endblock %}
-
-       
     </div>
-    
+
     <div class="footer">
-        <p>&copy; 2024 Motor Master - Sistema de Ventas. Todos los derechos reservados.</p>
+        &copy; 2024 Motor Master - Sistema de Ventas. Todos los derechos reservados.
     </div>
 
     <script>
-        // Crear partículas flotantes
         function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 25;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                const left = Math.random() * 100;
-                const delay = Math.random() * 6;
-                const duration = 3 + Math.random() * 3;
-                
-                particle.style.left = `${left}%`;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.animationDuration = `${duration}s`;
-                
-                const colors = ['#ff00ff', '#00ffff', '#ffff00'];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.background = randomColor;
-                
-                particlesContainer.appendChild(particle);
+            const container = document.getElementById('particles');
+            const colors = ['#ff00ff','#00ffff','#ffff00'];
+            for(let i=0;i<25;i++){
+                const p = document.createElement('div');
+                p.className='particle';
+                p.style.left=`${Math.random()*100}%`;
+                p.style.animationDelay=`${Math.random()*6}s`;
+                p.style.animationDuration=`${3+Math.random()*3}s`;
+                p.style.background = colors[Math.floor(Math.random()*colors.length)];
+                container.appendChild(p);
             }
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            createParticles();
-        });
+        document.addEventListener('DOMContentLoaded', createParticles);
     </script>
 </body>
 </html>
