@@ -4,6 +4,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Cliente
 from .forms import ClienteForm
 
+<<<<<<< HEAD
 class ClienteListView(ListView):
     model = Cliente
     template_name = 'clientes/lista_clientes.html'
@@ -46,3 +47,8 @@ class ClienteDeleteView(DeleteView):
         self.object.activo = False
         self.object.save()
         return redirect(self.success_url)
+=======
+# Create your views here.
+def pagina_principal(request):
+   return render(request, 'inicio.html')
+>>>>>>> 4a84c351868a018c03f5a11038bbc3130eaf6c88
