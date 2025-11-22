@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOTOR MASTER - Servicios Mecánicos Profesionales</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* LED Border Effect para HEADER */
+        .led-header-frame {
+            position: relative;
+            margin: 40px auto 60px;
+            max-width: 600px;
+            padding: 30px;
+        }
+
+        .header-led-border {
+            position: absolute;
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff) 1;
+            animation: ledGlow 2s linear infinite;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8),
+                        inset 0 0 20px rgba(255, 0, 255, 0.4);
+        }
+
+        /* LED Border Effect para SERVICIOS */
+        .service-led-frame {
+            position: relative;
+            margin: 20px;
+        }
+
+        .service-led-border {
+            position: absolute;
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff) 1;
+            animation: ledGlow 3s linear infinite;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5),
+                        inset 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        @keyframes ledGlow {
+            0% { border-image-source: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff); }
+            25% { border-image-source: linear-gradient(45deg, #00ffff, #ffff00, #ff00ff, #00ffff); }
+            50% { border-image-source: linear-gradient(45deg, #ffff00, #ff00ff, #00ffff, #ffff00); }
+            75% { border-image-source: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff); }
+            100% { border-image-source: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff); }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 0;
+            color: #ccc;
+            letter-spacing: 2px;
+        }
+
+        /* Services Grid */
+        .services {
+            padding: 60px 20px;
+            background: #111;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-image {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .service-info {
+            padding: 25px;
+            text-align: center;
+            background: #1a1a1a;
+        }
+
+        .service-name {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .service-description {
+            color: #888;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        /* Cuadro de Información */
+        .info-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .info-led-frame {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 50px;
+        }
+
+        .info-led-border {
+            position: absolute;
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff) 1;
+            animation: ledGlow 2s linear infinite;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.6),
+                        inset 0 0 25px rgba(255, 0, 255, 0.3);
+        }
+
+        .info-content {
+            text-align: center;
+        }
+
+        .info-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .info-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .info-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-item {
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Admin Button */
+        .admin-section {
+            text-align: center;
+            padding: 50px 20px;
+            background: #000;
+        }
+
+        .admin-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: transparent;
+            color: #00ffff;
+            border: 1px solid #00ffff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .admin-button:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 20px #00ffff;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ff00ff;
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+
+        /* Footer */
+        .footer {
+            padding: 30px 20px;
+            text-align: center;
+            background: #000;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+
+        /* Botones de contacto */
+        .contact-button {
+            display: inline-block;
+            padding: 10px 25px;
+            background: transparent;
+            color: #ff00ff;
+            border: 1px solid #ff00ff;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin-top: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .contact-button:hover {
+            background: #ff00ff;
+            color: #000;
+            box-shadow: 0 0 15px #ff00ff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .service-image {
+                height: 200px;
+            }
+
+            .info-led-frame {
+                padding: 30px 20px;
+            }
+        }
+        .logo-container {
+            margin: 20px auto;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+        }
+
+        .logo-container img {
+            width: 130%;
+            height: auto;
+            object-fit: contain;
+        }         
+    </style>
+</head>
+<body>
+{% load static %}
+
+    <div class="particles" id="particles"></div>
+<section class="hero">
+    <div class="led-header-frame">
+        <div class="header-led-border"></div>
+        <div class="hero-content">
+            <!-- Logo -->
+           
+            
+            <h1>MOTOR MASTER</h1>
+            <p>EXPERTOS EN MECÁNICA AUTOMOTRIZ</p>
+        </div>
+    </div>
+</section>
+
+
+    <section class="services">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <div class="services-grid">
+
+            <div class="service-led-frame">
+                <div class="service-led-border"></div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80');"></div>
+                    <div class="service-info">
+                        <h3 class="service-name">MANTENIMIENTO GENERAL</h3>
+                        <p class="service-description">Servicio completo de mantenimiento preventivo y correctivo para todo tipo de vehículos. Incluye cambio de aceite, filtros, revisión de frenos, suspensión y sistema eléctrico.</p>
+                        <a href="#" class="contact-button">Solicitar Servicio</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-led-frame">
+                <div class="service-led-border"></div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1603712610496-5362a0e7a5c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"></div>
+                    <div class="service-info">
+                        <h3 class="service-name">REPARACIÓN DE MOTORES</h3>
+                        <p class="service-description">Diagnóstico y reparación especializada de motores de gasolina y diésel. Desde ajustes básicos hasta reconstrucciones completas con garantía de calidad.</p>
+                        <a href="#" class="contact-button">Solicitar Servicio</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-led-frame">
+                <div class="service-led-border"></div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1621905251180-73cc0c7f6f8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80');"></div>
+                    <div class="service-info">
+                        <h3 class="service-name">SISTEMA ELÉCTRICO</h3>
+                        <p class="service-description">Reparación y mantenimiento de sistemas eléctricos, diagnóstico computarizado, reparación de alternadores, arranques y cableado automotriz.</p>
+                        <a href="#" class="contact-button">Solicitar Servicio</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-led-frame">
+                <div class="service-led-border"></div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1601584115197-04ecc0da31d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"></div>
+                    <div class="service-info">
+                        <h3 class="service-name">FRENOS Y SUSPENSIÓN</h3>
+                        <p class="service-description">Servicio completo de frenos, cambio de pastillas, discos, líquido de frenos y reparación de sistemas de suspensión para máxima seguridad.</p>
+                        <a href="#" class="contact-button">Solicitar Servicio</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-led-frame">
+                <div class="service-led-border"></div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1563720223485-854169614946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"></div>
+                    <div class="service-info">
+                        <h3 class="service-name">TRANSMISIÓN</h3>
+                        <p class="service-description">Reparación y mantenimiento de transmisiones automáticas y manuales, cambio de fluidos y ajustes para un funcionamiento óptimo.</p>
+                        <a href="#" class="contact-button">Solicitar Servicio</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-led-frame">
+                <div class="service-led-border"></div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1565680822767-4167bb0aea98?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"></div>
+                    <div class="service-info">
+                        <h3 class="service-name">DIAGNÓSTICO COMPUTARIZADO</h3>
+                        <p class="service-description">Análisis completo con tecnología de punta para identificar problemas en sistemas electrónicos y mecánicos de tu vehículo.</p>
+                        <a href="#" class="contact-button">Solicitar Servicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="info-section">
+        <div class="info-led-frame">
+            <div class="info-led-border"></div>
+            <div class="info-content">
+                <h2>SOBRE MOTOR MASTER</h2>
+                <div class="logo-container">
+                    <img src="{% static 'images/logo.jpg' %}" alt="Motor Master">
+ 
+                </div>
+                <p>En MOTOR MASTER, nos especializamos en ofrecer servicios mecánicos de alta calidad con más de 15 años de experiencia en el sector automotriz. Nuestro equipo de técnicos certificados está comprometido con la excelencia y la satisfacción del cliente.</p>
+                <p>Utilizamos herramientas de diagnóstico de última generación y repuestos de la más alta calidad para garantizar que tu vehículo reciba el mejor cuidado posible. Tu seguridad en la carretera es nuestra prioridad.</p>
+                
+                <div class="info-features">
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Misión</h3>
+                        <p>Proporcionar servicios mecánicos confiables y de calidad que superen las expectativas de nuestros clientes, garantizando su seguridad y satisfacción.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🌟</div>
+                        <h3>Visión</h3>
+                        <p>Ser el taller mecánico de referencia en la región, reconocido por nuestra excelencia, profesionalismo y atención personalizada a cada cliente.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">💎</div>
+                        <h3>Valores</h3>
+                        <p>Honestidad, calidad, compromiso, responsabilidad y servicio al cliente en cada reparación que realizamos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="admin-section">
+      
+        <a href="#" class="admin-button">
+            🚀 Panel de Administración
+        </a>
+ 
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 MOTOR MASTER Taller Mecánico. Todos los derechos reservados.</p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">Horario: Lunes a Viernes 8:00 AM - 6:00 PM | Sábados 9:00 AM - 2:00 PM</p>
+    </footer>
+
+    <script>
+        // Crear partículas flotantes
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const left = Math.random() * 100;
+                const delay = Math.random() * 6;
+                const duration = 3 + Math.random() * 3;
+                
+                particle.style.left = `${left}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                const colors = ['#ff00ff', '#00ffff', '#ffff00'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = randomColor;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Efecto de escritura para el título
+        const title = document.querySelector('.hero-content h1');
+        const text = title.textContent;
+        title.textContent = '';
+        
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                title.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 150);
+            }
+        }
+
+        // Iniciar efectos visuales
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            setTimeout(typeWriter, 1000);
+        });
+
+        // Efecto de reinicio de animación LED
+        setInterval(() => {
+            const allLeds = document.querySelectorAll('.header-led-border, .service-led-border, .info-led-border');
+            allLeds.forEach(led => {
+                led.style.animation = 'none';
+                setTimeout(() => {
+                    led.style.animation = 'ledGlow 3s linear infinite';
+                }, 100);
+            });
+        }, 4000);
+
+        // Efecto para botones de contacto
+        document.querySelectorAll('.contact-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Efecto visual al hacer clic
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+                
+                // Mensaje de confirmación
+                alert('Gracias por tu interés. Nos contactaremos contigo pronto para coordinar tu servicio.');
+            });
+        });
+    </script>
+</body>
+</html>
