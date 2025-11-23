@@ -2,3 +2,10 @@ env/
 __pycache__/
 *.pyc
 db.sqlite3
+# Si no tienes .gitignore, créalo
+if not exist .gitignore echo "env/" > .gitignore
+
+# O agrega estas líneas a .gitignore si ya existe
+echo "env/" >> .gitignore
+echo "venv/" >> .gitignore
+echo ".venv/" >> .gitignore
