@@ -12,7 +12,7 @@ from .forms import VehiculoForm
 
 class VehiculoListView(ListView):
     model = Vehiculo
-    template_name = 'vehiculos/lista_vehiculos.html'
+    template_name = 'lista_vehiculos.html'
     context_object_name = 'vehiculos'
 
     def get_queryset(self):
@@ -26,7 +26,7 @@ def crear_vehiculo(request):
             return redirect('lista_vehiculos')
     else:
         form = VehiculoForm()
-    return render(request, 'vehiculos/crear_vehiculo.html', {'form': form})
+    return render(request, 'crear_vehiculo.html', {'form': form})
 
 def editar_vehiculo(request, pk):
     vehiculo = get_object_or_404(Vehiculo, pk=pk)
@@ -37,11 +37,11 @@ def editar_vehiculo(request, pk):
             return redirect('lista_vehiculos')
     else:
         form = VehiculoForm(instance=vehiculo)
-    return render(request, 'vehiculos/editar_vehiculo.html', {'form': form, 'vehiculo': vehiculo})
+    return render(request, 'editar_vehiculo.html', {'form': form, 'vehiculo': vehiculo})
 
 class VehiculoDeleteView(DeleteView):
     model = Vehiculo
-    template_name = 'vehiculos/confirmar_eliminar_vehiculo.html'
+    template_name = 'confirmar_eliminar_vehiculo.html'
     success_url = reverse_lazy('lista_vehiculos')
 
     def delete(self, request, *args, **kwargs):
