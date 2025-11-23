@@ -364,18 +364,24 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const deleteBtn = document.querySelector('.btn-eliminar');
+    const deleteForm = document.querySelector('.delete-form');
     
     deleteBtn.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevenir envío inmediato
+        
         const confirmation = confirm('⚠ ¿ESTÁS ABSOLUTAMENTE SEGURO?\n\nEsta acción eliminará permanentemente el vehículo y todos sus datos asociados.\n\nEsta operación NO se puede deshacer.');
         
-        if (!confirmation) {
-            e.preventDefault();
-        } else {
+        if (confirmation) {
             // Efecto visual de confirmación
             this.innerHTML = '🗑 Eliminando...';
             this.disabled = true;
             this.style.background = '#ff4444';
             this.style.color = '#000';
+            
+            // ⭐⭐ ENVIAR EL FORMULARIO ⭐⭐
+            setTimeout(() => {
+                deleteForm.submit();
+            }, 500); // Pequeño delay para ver la animación
         }
     });
     

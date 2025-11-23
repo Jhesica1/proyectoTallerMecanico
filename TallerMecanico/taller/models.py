@@ -19,6 +19,7 @@ class Cliente(models.Model):
 
 class Vehiculo(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+
     marca = models.CharField(max_length=50)
     modelo = models.CharField(max_length=50)
     año = models.IntegerField()

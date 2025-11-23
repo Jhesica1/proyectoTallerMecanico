@@ -81,16 +81,50 @@ class EditarVehiculoView(UpdateView):
     success_url = reverse_lazy('lista_vehiculos')
 
 # Vista para eliminar vehículo
-def eliminar_vehiculo(request, pk):
-    vehiculo = get_object_or_404(Vehiculo, pk=pk)
-    if request.method == 'POST':
-        vehiculo.activo = False
-        vehiculo.save()
-        messages.success(request, 'Vehículo eliminado exitosamente.')
-        return redirect('lista_vehiculos')
+# Vista para eliminar vehículo
+def eliminar_vehiculo(request, vehiculo_id):
+    vehiculo = get_object_or_404(Vehiculo, id=vehiculo_id)
     
-    return render(request, 'confirmar_eliminar.html', {'vehiculo': vehiculo})  # ← Cambiado
-
+    # AGREGAR ESTAS LÍNEAS DE DEBUGGING AQUÍ:
+    print(f"🎯 INICIANDO ELIMINACIÓN")
+    print(f"📝 Método de solicitud: {request.method}")
+    print(f"🚗 Vehículo a eliminar: {vehiculo.id} - {vehiculo.placa}")
+    print(f"👤 Cliente asociado: {vehiculo.cliente}")
+    
+    if request.method == 'POST':
+        # AGREGAR ESTO DENTRO DEL IF POST:
+        print("✅ FORMULARIO POST RECIBIDO - PROCESANDO ELIMINACIÓN")
+        
+        try:
+            # AGREGAR ESTO AL INICIO DEL TRY:
+            print(f"🔍 Verificando existencia antes de eliminar...")
+            existe_antes = Vehiculo.objects.filter(id=vehiculo_id).exists()
+            print(f"🔍 ¿Existe antes de eliminar?: {existe_antes}")
+            
+            # Debug: Imprimir antes de eliminar
+            print(f"Intentando eliminar vehículo: {vehiculo.id} - {vehiculo.placa}")
+            
+            vehiculo.delete()
+            
+            # AGREGAR ESTO DESPUÉS DEL DELETE:
+            print("🔄 DELETE() EJECUTADO - VERIFICANDO SI SE ELIMINÓ...")
+            
+            # Debug: Verificar si se eliminó
+            if not Vehiculo.objects.filter(id=vehiculo_id).exists():
+                print("✅ Vehículo eliminado correctamente")
+                messages.success(request, 'Vehículo eliminado correctamente.')
+                return redirect('lista_vehiculos')
+            else:
+                print("❌ El vehículo sigue existiendo después de delete()")
+                messages.error(request, 'Error: No se pudo eliminar el vehículo.')
+                
+        except Exception as e:
+            print(f"❌ ERROR CAPTURADO: {e}")
+            print(f"❌ TIPO DE ERROR: {type(e)}")
+            messages.error(request, f'Error al eliminar: {e}')
+    
+    return render(request, 'confirmar_eliminar.html', {'vehiculo': vehiculo})
+    
 # Vista para ver detalles del vehículo
 def detalle_vehiculo(request, pk):
     vehiculo = get_object_or_404(Vehiculo, pk=pk)
