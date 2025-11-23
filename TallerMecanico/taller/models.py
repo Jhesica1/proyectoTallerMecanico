@@ -32,3 +32,15 @@ class Vehiculo(models.Model):
     
     def __str__(self):
         return f"{self.marca} {self.modelo} - {self.placa}"
+
+class Repuesto(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    cantidad_stock = models.IntegerField()
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    activo = models.BooleanField(default=True)
+
+    def _str_(self):
+        return self.nombre
+    class Meta:
+        db_table = 'repuesto'

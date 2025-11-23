@@ -2,6 +2,7 @@ from django import forms
 from .models import Cliente
 from django import forms
 from .models import Vehiculo
+from .models import Repuesto     
 
 class VehiculoForm(forms.ModelForm):
     class Meta:
@@ -30,3 +31,14 @@ class ClienteForm(forms.ModelForm):
             'activo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
+class RepuestoForm(forms.ModelForm):
+    class Meta:
+        model = Repuesto
+        fields = ['nombre', 'descripcion', 'cantidad_stock', 'precio_unitario', 'activo']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+            'cantidad_stock': forms.NumberInput(attrs={'class': 'form-control'}),
+            'precio_unitario': forms.NumberInput(attrs={'class': 'form-control'}),
+            'activo': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }

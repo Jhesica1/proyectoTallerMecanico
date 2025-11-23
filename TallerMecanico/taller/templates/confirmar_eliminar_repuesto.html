@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
-{% block title %}Eliminar Cliente{% endblock %}
+{% block title %}Eliminar Repuesto{% endblock %}
 
 {% block content %}
 
@@ -9,7 +9,7 @@
         <div class="section-led-border"></div>
         
         <div class="form-header">
-            <h2>🗑️ Eliminar Cliente</h2>
+            <h2>🗑️ Eliminar Repuesto</h2>
             <div class="warning-avatar">
                 ⚠️
             </div>
@@ -22,43 +22,29 @@
                 </div>
                 <h3 class="warning-title">Confirmar Eliminación</h3>
                 <p class="warning-text">
-                    ¿Estás seguro que deseas eliminar al cliente 
-                    <strong class="cliente-name">{{ object.nombre }} {{ object.apellido }}</strong>?
+                    ¿Estás seguro que deseas eliminar el repuesto 
+                    <strong class="repuesto-name">{{ repuesto.nombre }}</strong>?
                 </p>
                 
-                <div class="cliente-details">
+                <div class="repuesto-details">
                     <div class="detail-item">
-                        <span class="detail-label">📞 Teléfono:</span>
-                        <span class="detail-value">{{ object.telefono|default:"No especificado" }}</span>
+                        <span class="detail-label">📦 Cantidad en stock:</span>
+                        <span class="detail-value">{{ repuesto.cantidad_stock }}</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">📧 Email:</span>
-                        <span class="detail-value">{{ object.email|default:"No especificado" }}</span>
+                        <span class="detail-label">💰 Precio:</span>
+                        <span class="detail-value">${{ repuesto.precio_unitario }}</span>
                     </div>
-                    {% if object.direccion %}
+                    {% if repuesto.categoria %}
                     <div class="detail-item">
-                        <span class="detail-label">🏠 Dirección:</span>
-                        <span class="detail-value">{{ object.direccion }}</span>
+                        <span class="detail-label">🏷️ Categoría:</span>
+                        <span class="detail-value">{{ repuesto.categoria }}</span>
                     </div>
                     {% endif %}
-                    <div class="detail-item">
-                        <span class="detail-label">📅 Fecha Registro:</span>
-                        <span class="detail-value">{{ object.fecha_registro|date:"d/m/Y H:i" }}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">⚡ Estado:</span>
-                        <span class="detail-value">
-                            {% if object.activo %}
-                            <span class="status-active">Activo</span>
-                            {% else %}
-                            <span class="status-inactive">Inactivo</span>
-                            {% endif %}
-                        </span>
-                    </div>
                 </div>
 
                 <p class="warning-note">
-                    ⚠️ Esta acción no se puede deshacer y el cliente será eliminado permanentemente del sistema junto con todos sus datos asociados.
+                    ⚠️ Esta acción no se puede deshacer y el repuesto será eliminado permanentemente del sistema.
                 </p>
             </div>
 
@@ -66,13 +52,13 @@
                 {% csrf_token %}
                 
                 <div class="form-actions">
-                    <a href="{% url 'lista_clientes' %}" class="btn-cancelar">
+                    <a href="{% url 'lista_repuestos' %}" class="btn-cancelar">
                         <span>↩️</span>
                         Cancelar
                     </a>
                     <button type="submit" class="btn-eliminar">
                         <span>🗑️</span>
-                        Sí, Eliminar Cliente
+                        Sí, Eliminar Repuesto
                     </button>
                 </div>
             </form>
@@ -145,13 +131,13 @@
     line-height: 1.6;
 }
 
-.cliente-name {
+.repuesto-name {
     color: #ff4444;
     text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
     font-size: 1.3em;
 }
 
-.cliente-details {
+.repuesto-details {
     background: rgba(26, 26, 26, 0.6);
     padding: 25px;
     border-radius: 15px;
@@ -180,19 +166,6 @@
 .detail-value {
     color: #fff;
     font-weight: 500;
-}
-
-/* Indicadores de estado */
-.status-active {
-    color: #00ff00;
-    font-weight: bold;
-    text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
-}
-
-.status-inactive {
-    color: #ff4444;
-    font-weight: bold;
-    text-shadow: 0 0 8px rgba(255, 68, 68, 0.5);
 }
 
 .warning-note {
@@ -308,7 +281,7 @@
         padding: 25px;
     }
     
-    .cliente-details {
+    .repuesto-details {
         padding: 15px;
     }
     

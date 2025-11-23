@@ -3,7 +3,8 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView
 from .models import Cliente
 from .forms import ClienteForm
-
+from .models import Repuesto
+from .forms import RepuestoForm
 
 # ------------------ Vehículos ------------------
 from django.shortcuts import render, redirect, get_object_or_404
@@ -100,3 +101,73 @@ def pagina_principal(request):
     return render(request, 'inicio.html')
 
 
+def crear_cliente(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_clientes')
+    else:
+        form = ClienteForm()
+    
+    return render(request, 'crear_cliente.html', {'form': form})
+
+def editar_cliente(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
+    if request.method == 'POST':
+        form = ClienteForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_clientes')
+    else:
+        form = ClienteForm(instance=cliente)
+    
+    return render(request, 'editar_cliente.html', {'form': form, 'cliente': cliente})
+
+class ClienteDeleteView(DeleteView):
+    model = Cliente
+    template_name = 'confirmar_eliminar_cliente.html'
+    success_url = reverse_lazy('lista_clientes')
+    
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # En lugar de eliminar, marcamos como inactivo
+        self.object.activo = False
+        self.object.save()
+        return redirect(self.success_url)
+
+
+def pagina_principal(request):
+   return render(request, 'inicio.html')
+
+def lista_repuestos(request):
+    repuestos = Repuesto.objects.all()
+    return render(request, 'lista_repuestos.html', {'repuestos': repuestos})
+
+def crear_repuesto(request):
+    if request.method == 'POST':
+        form = RepuestoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_repuestos')
+    else:
+        form = RepuestoForm()
+    return render(request, 'crear_repuesto.html', {'form': form})
+
+def editar_repuesto(request, pk):
+    repuesto = get_object_or_404(Repuesto, pk=pk)
+    if request.method == 'POST':
+        form = RepuestoForm(request.POST, instance=repuesto)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_repuestos')
+    else:
+        form = RepuestoForm(instance=repuesto)
+    return render(request, 'editar_repuesto.html', {'form': form})
+
+def eliminar_repuesto(request, pk):
+    repuesto = get_object_or_404(Repuesto, pk=pk)
+    if request.method == 'POST':
+        repuesto.delete()
+        return redirect('lista_repuestos')
+    return render(request, 'confirmar_eliminar_repuesto.html', {'repuesto': repuesto})
