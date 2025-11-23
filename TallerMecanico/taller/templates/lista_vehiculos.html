@@ -1,0 +1,397 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+
+<div class="vehiculos-container">
+    <div class="welcome-section">
+        <div class="section-led-border"></div>
+        
+        <div class="table-header">
+            <h2>Vehículos Registrados</h2>
+            <button onclick="window.location.href='{% url 'crear_vehiculo' %}'" class="btn-crear">
+                <span>🚗</span> Nuevo Vehículo
+            </button>
+        </div>
+
+     
+
+        <div class="table-responsive">
+            <table class="vehiculo-table">
+                <thead>
+                    <tr>
+                        <th>Placa</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Año</th>
+                        <th>Color</th>
+                        <th>Cliente</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vehiculo in vehiculos %}
+                    <tr>
+                        <td>{{ vehiculo.placa }}</td>
+                        <td>{{ vehiculo.marca }}</td>
+                        <td>{{ vehiculo.modelo }}</td>
+                        <td>{{ vehiculo.año }}</td>
+                        <td>{{ vehiculo.color }}</td>
+                        <td>{{ vehiculo.cliente.nombre }} {{ vehiculo.cliente.apellido }}</td>
+                        <td>
+                            <span class="estado-badge {% if vehiculo.activo %}activo{% else %}inactivo{% endif %}">
+                                {{ vehiculo.activo|yesno:"Activo,Inactivo" }}
+                            </span>
+                        </td>
+                        <td class="actions-cell">
+                            <button onclick="window.location.href='{% url 'detalle_vehiculo' vehiculo.pk %}'" 
+                                    class="btn-detalle">
+                                Ver
+                            </button>
+                            <button onclick="window.location.href='{% url 'editar_vehiculo' vehiculo.pk %}'" 
+                                    class="btn-editar">
+                                Editar
+                            </button>
+                            {% if vehiculo.activo %}
+                            <button onclick="window.location.href='{% url 'eliminar_vehiculo' vehiculo.pk %}'" 
+                                    class="btn-borrar">
+                                Eliminar
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="empty-message">
+                            <div class="empty-state">
+                                <span class="empty-icon">🚗</span>
+                                <p>No hay vehículos registrados.</p>
+                                <button onclick="window.location.href='{% url 'crear_vehiculo' %}'" class="btn-crear">
+                                    <span>➕</span> Registrar Primer Vehículo
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+       
+    </div>
+</div>
+
+<style>
+/* ESTILOS ESPECÍFICOS PARA LOS BOTONES DE ESTA PÁGINA */
+.btn-crear, .btn-detalle, .btn-editar, .btn-borrar, .btn-filtrar, .btn-limpiar, .btn-paginacion, .btn-pagina {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+    font-family: 'Arial', sans-serif;
+}
+
+.btn-crear {
+    background: transparent;
+    color: #ff00ff;
+    border: 1px solid #ff00ff;
+}
+
+.btn-crear:hover {
+    background: #ff00ff;
+    color: #000;
+    box-shadow: 0 0 20px #ff00ff;
+    transform: translateY(-2px);
+}
+
+.btn-detalle {
+    background: transparent;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+}
+
+.btn-detalle:hover {
+    background: #00ff00;
+    color: #000;
+    box-shadow: 0 0 15px #00ff00;
+    transform: translateY(-2px);
+}
+
+.btn-editar {
+    background: transparent;
+    color: #00ffff;
+    border: 1px solid #00ffff;
+}
+
+.btn-editar:hover {
+    background: #00ffff;
+    color: #000;
+    box-shadow: 0 0 15px #00ffff;
+    transform: translateY(-2px);
+}
+
+.btn-borrar {
+    background: transparent;
+    color: #ff4444;
+    border: 1px solid #ff4444;
+}
+
+.btn-borrar:hover {
+    background: #ff4444;
+    color: #000;
+    box-shadow: 0 0 15px #ff4444;
+    transform: translateY(-2px);
+}
+
+.btn-filtrar {
+    background: transparent;
+    color: #ff9900;
+    border: 1px solid #ff9900;
+}
+
+.btn-filtrar:hover {
+    background: #ff9900;
+    color: #000;
+    box-shadow: 0 0 15px #ff9900;
+    transform: translateY(-2px);
+}
+
+.btn-limpiar {
+    background: transparent;
+    color: #cccccc;
+    border: 1px solid #cccccc;
+}
+
+.btn-limpiar:hover {
+    background: #cccccc;
+    color: #000;
+    box-shadow: 0 0 15px #cccccc;
+    transform: translateY(-2px);
+}
+
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* Estilos para la tabla */
+.vehiculos-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.vehiculo-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.vehiculo-table thead {
+    background: #2a2a2a;
+}
+
+.vehiculo-table th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #00ffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9em;
+    border-bottom: 2px solid #00ffff;
+}
+
+.vehiculo-table td {
+    padding: 12px;
+    border-bottom: 1px solid #333;
+    color: #ccc;
+    transition: all 0.3s ease;
+}
+
+.vehiculo-table tbody tr:hover {
+    background: rgba(0, 255, 255, 0.1);
+}
+
+.vehiculo-table tbody tr:hover td {
+    color: #fff;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* Estilos para los filtros */
+.filtros-section {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+.filtros-form {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.filtro-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filtro-input {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 10px 15px;
+    color: #fff;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.filtro-input:focus {
+    outline: none;
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.filtro-input::placeholder {
+    color: #777;
+}
+
+/* Estilos para los badges de estado */
+.estado-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.estado-badge.activo {
+    background: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+    border: 1px solid #00ff00;
+}
+
+.estado-badge.inactivo {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff4444;
+    border: 1px solid #ff4444;
+}
+
+/* Estilos para la paginación */
+.paginacion {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.paginacion-contenido {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-paginacion, .btn-pagina {
+    background: transparent;
+    color: #00ffff;
+    border: 1px solid #00ffff;
+    padding: 8px 15px;
+}
+
+.btn-paginacion:hover, .btn-pagina:hover {
+    background: #00ffff;
+    color: #000;
+    box-shadow: 0 0 10px #00ffff;
+}
+
+.pagina-activa {
+    background: #00ffff;
+    color: #000;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+/* Estilos para estado vacío */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.empty-icon {
+    font-size: 3em;
+    display: block;
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    color: #ccc;
+}
+
+.empty-message {
+    text-align: center;
+    color: #ff00ff;
+    font-size: 1.2em;
+    padding: 40px;
+    background: #2a1a2a;
+    border-radius: 12px;
+    border: 2px dashed #ff00ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .actions-cell {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .btn-crear, .btn-detalle, .btn-editar, .btn-borrar, .btn-filtrar, .btn-limpiar {
+        padding: 8px 16px;
+        font-size: 0.8em;
+    }
+    
+    .filtros-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .paginacion-contenido {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}

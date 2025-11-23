@@ -1,65 +1,66 @@
-
-from django.shortcuts import render
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DeleteView
 from .models import Cliente
 from .forms import ClienteForm
+
+
+# ------------------ Vehículos ------------------
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Vehiculo
 from .forms import VehiculoForm
 
-
-class VehiculoListView(ListView):
+# Vista para listar vehículos
+class ListaVehiculosView(ListView):
     model = Vehiculo
-    template_name = 'lista_vehiculos.html'
+    template_name = 'lista_vehiculos.html'  # ← Cambiado
     context_object_name = 'vehiculos'
-
+    paginate_by = 10
+    
     def get_queryset(self):
-        return Vehiculo.objects.filter(activo=True)
+        return Vehiculo.objects.filter(activo=True).order_by('-fecha_registro')
 
-def crear_vehiculo(request):
-    if request.method == 'POST':
-        form = VehiculoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_vehiculos')
-    else:
-        form = VehiculoForm()
-    return render(request, 'crear_vehiculo.html', {'form': form})
-
-def editar_vehiculo(request, pk):
-    vehiculo = get_object_or_404(Vehiculo, pk=pk)
-    if request.method == 'POST':
-        form = VehiculoForm(request.POST, instance=vehiculo)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_vehiculos')
-    else:
-        form = VehiculoForm(instance=vehiculo)
-    return render(request, 'editar_vehiculo.html', {'form': form, 'vehiculo': vehiculo})
-
-class VehiculoDeleteView(DeleteView):
+# Vista para crear vehículo
+class CrearVehiculoView(CreateView):
     model = Vehiculo
-    template_name = 'confirmar_eliminar_vehiculo.html'
+    form_class = VehiculoForm
+    template_name = 'vehiculo_form.html'  # ← Cambiado
     success_url = reverse_lazy('lista_vehiculos')
 
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.activo = False
-        self.object.save()
-        return redirect(self.success_url)
+# Vista para editar vehículo
+class EditarVehiculoView(UpdateView):
+    model = Vehiculo
+    form_class = VehiculoForm
+    template_name = 'vehiculo_form.html'  # ← Cambiado
+    success_url = reverse_lazy('lista_vehiculos')
 
+# Vista para eliminar vehículo
+def eliminar_vehiculo(request, pk):
+    vehiculo = get_object_or_404(Vehiculo, pk=pk)
+    if request.method == 'POST':
+        vehiculo.activo = False
+        vehiculo.save()
+        messages.success(request, 'Vehículo eliminado exitosamente.')
+        return redirect('lista_vehiculos')
+    
+    return render(request, 'confirma_r_eliminar.html', {'vehiculo': vehiculo})  # ← Cambiado
 
+# Vista para ver detalles del vehículo
+def detalle_vehiculo(request, pk):
+    vehiculo = get_object_or_404(Vehiculo, pk=pk)
+    return render(request, 'detalle_vehiculo.html', {'vehiculo': vehiculo})  # ← Cambiado
 
+# ------------------ Clientes ------------------
 class ClienteListView(ListView):
     model = Cliente
     template_name = 'lista_clientes.html'
     context_object_name = 'clientes'
-    
+
     def get_queryset(self):
         return Cliente.objects.filter(activo=True)
-
 
 def crear_cliente(request):
     if request.method == 'POST':
@@ -69,7 +70,6 @@ def crear_cliente(request):
             return redirect('lista_clientes')
     else:
         form = ClienteForm()
-    
     return render(request, 'crear_cliente.html', {'form': form})
 
 def editar_cliente(request, pk):
@@ -81,65 +81,22 @@ def editar_cliente(request, pk):
             return redirect('lista_clientes')
     else:
         form = ClienteForm(instance=cliente)
-    
     return render(request, 'editar_cliente.html', {'form': form, 'cliente': cliente})
 
 class ClienteDeleteView(DeleteView):
     model = Cliente
     template_name = 'confirmar_eliminar_cliente.html'
     success_url = reverse_lazy('lista_clientes')
-    
+
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        # En lugar de eliminar, marcamos como inactivo
         self.object.activo = False
         self.object.save()
         return redirect(self.success_url)
 
 
-class ClienteListView(ListView):
-    model = Cliente
-    template_name = 'clientes/lista_clientes.html'
-    context_object_name = 'clientes'
-    
-    def get_queryset(self):
-        return Cliente.objects.filter(activo=True)
-
-def crear_cliente(request):
-    if request.method == 'POST':
-        form = ClienteForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_clientes')
-    else:
-        form = ClienteForm()
-    
-    return render(request, 'clientes/crear_cliente.html', {'form': form})
-
-def editar_cliente(request, pk):
-    cliente = get_object_or_404(Cliente, pk=pk)
-    if request.method == 'POST':
-        form = ClienteForm(request.POST, instance=cliente)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_clientes')
-    else:
-        form = ClienteForm(instance=cliente)
-    
-    return render(request, 'clientes/editar_cliente.html', {'form': form, 'cliente': cliente})
-
-class ClienteDeleteView(DeleteView):
-    model = Cliente
-    template_name = 'clientes/confirmar_eliminar_cliente.html'
-    success_url = reverse_lazy('lista_clientes')
-    
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        # En lugar de eliminar, marcamos como inactivo
-        self.object.activo = False
-        self.object.save()
-        return redirect(self.success_url)
-# Create your views here.
+# ------------------ Página principal ------------------
 def pagina_principal(request):
-   return render(request, 'inicio.html')
+    return render(request, 'inicio.html')
+
 

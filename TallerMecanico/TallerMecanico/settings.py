@@ -51,14 +51,19 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'TallerMecanico.urls'
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # ← Agrega esta línea
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -66,6 +71,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'TallerMecanico.wsgi.application'
 
@@ -80,7 +86,7 @@ DATABASES = {
         'ENGINE' : 'django.db.backends.mysql',
         'NAME' : 'taller_mecanico',
         'USER' : 'root',
-        'PASSWORD' : '12345678',
+        'PASSWORD' : '12768305lp',
         'HOST' : 'localhost',
         'PORT' : '3306',
     }
