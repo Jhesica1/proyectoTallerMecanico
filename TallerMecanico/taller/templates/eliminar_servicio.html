@@ -421,11 +421,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!confirmation) {
             e.preventDefault();
         } else {
-            // Efecto visual de confirmación
-            this.innerHTML = '🗑 Eliminando...';
-            this.disabled = true;
+            // Solo cambiar el texto, no deshabilitar el botón
+            const originalHTML = this.innerHTML;
+            this.innerHTML = '<span>⏳</span> Eliminando...';
             this.style.background = '#ff4444';
             this.style.color = '#000';
+            
+            // Restaurar el botón después de 3 segundos por si hay algún error
+            setTimeout(() => {
+                this.innerHTML = originalHTML;
+                this.style.background = '';
+                this.style.color = '';
+            }, 3000);
         }
     });
     
