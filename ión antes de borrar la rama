@@ -1,0 +1,16 @@
+[33m57bac71[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to HEAD
+[33m57bac71[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{1}: commit: Agregando estilos
+[33mb1dbcf6[m HEAD@{2}: pull --rebase (finish): returning to refs/heads/main
+[33mb1dbcf6[m HEAD@{3}: pull --rebase (start): checkout b1dbcf65d5609509a335d0ffa4b29895be4e6e8a
+[33m6546fc0[m HEAD@{4}: commit: modificando link
+[33m280632a[m HEAD@{5}: reset: moving to HEAD
+[33m280632a[m HEAD@{6}: commit: añdiendo stilos y ajuste de rutas
+[33m03a577a[m HEAD@{7}: commit (merge): estilos actualizados
+[33m41cbb32[m HEAD@{8}: commit: estilos actualizados
+[33m4a84c35[m HEAD@{9}: commit: Actualizando settings.py para MySQL
+[33mdb76ad1[m HEAD@{10}: commit: conectando ala base de datos
+[33m3229411[m HEAD@{11}: commit: se puso estilos y la pagina principal
+[33m32a1948[m HEAD@{12}: commit: agregando base.html
+[33m6efb859[m HEAD@{13}: commit: Instalación de el proyecto
+[33m9f4a2af[m HEAD@{14}: Branch: renamed refs/heads/master to refs/heads/main
+[33m9f4a2af[m HEAD@{16}: commit (initial): first commit

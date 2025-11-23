@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Detalles Servicio - Motor Master{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="welcome-section">
+        <div class="section-led-border"></div>
+        
+        <div class="form-header">
+            <h2>🔍 Detalles Servicio #{{ servicio.id }}</h2>
+            <div class="form-avatar">
+                📋
+            </div>
+        </div>
+
+        <div class="form-content">
+            <div class="servicio-details-card">
+                <div class="servicio-header">
+                    <div class="servicio-icon">
+                        🔧
+                    </div>
+                    <h3 class="servicio-title">Información del Servicio</h3>
+                </div>
+
+                <div class="details-grid">
+                    <div class="detail-group">
+                        <span class="detail-label">🚗 ID Vehículo:</span>
+                        <span class="detail-value">{{ servicio.vehiculo_id }}</span>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <span class="detail-label">📊 Estado:</span>
+                        <span class="estado-badge estado-{{ servicio.estado|lower }}">
+                            {{ servicio.estado }}
+                        </span>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <span class="detail-label">💰 Total:</span>
+                        <span class="detail-value">${{ servicio.total|default:"0.00" }}</span>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <span class="detail-label">🔩 ID Repuesto:</span>
+                        <span class="detail-value">{{ servicio.repuesto_id|default:"No asignado" }}</span>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <span class="detail-label">📦 Cantidad Repuesto:</span>
+                        <span class="detail-value">{{ servicio.cantidad_repuesto|default:"0" }}</span>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <span class="detail-label">⚡ Repuesto Usado:</span>
+                        <span class="detail-value">
+                            {% if servicio.repuesto_usado %}
+                            <span class="status-active">Sí</span>
+                            {% else %}
+                            <span class="status-inactive">No</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    
+                    <div class="detail-group">
+                        <span class="detail-label">📅 Fecha Creación:</span>
+                        <span class="detail-value">{{ servicio.fecha_creacion|date:"d/m/Y"|default:"No especificada" }}</span>
+                    </div>
+                    
+                    {% if servicio.fecha_entrega %}
+                    <div class="detail-group">
+                        <span class="detail-label">🕒 Fecha Entrega:</span>
+                        <span class="detail-value">{{ servicio.fecha_entrega|date:"d/m/Y" }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if servicio.descripcion %}
+                <div class="descripcion-section">
+                    <span class="detail-label">📝 Descripción:</span>
+                    <p class="descripcion-text">{{ servicio.descripcion }}</p>
+                </div>
+                {% endif %}
+
+                <div class="form-actions">
+                    <a href="{% url 'lista_servicios' %}" class="btn-cancelar">
+                        <span>↩️</span>
+                        Volver a la lista
+                    </a>
+                    <a href="{% url 'editar_servicio' servicio.id %}" class="btn-editar">
+                        <span>✏️</span>
+                        Editar Servicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.form-header h2 {
+    color: #00ffff;
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+    margin: 0;
+    font-size: 2.2em;
+}
+
+.form-avatar {
+    font-size: 3em;
+    background: linear-gradient(135deg, #00ffff, #0088ff);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+    animation: pulse 2s infinite;
+}
+
+.servicio-details-card {
+    background: rgba(26, 26, 26, 0.8);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+.servicio-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.servicio-icon {
+    font-size: 4em;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+}
+
+.servicio-title {
+    color: #00ffff;
+    font-size: 1.8em;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.detail-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(42, 42, 42, 0.5);
+    border-radius: 10px;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+.detail-group:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.detail-label {
+    color: #00ffff;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-value {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Badges de estado */
+.estado-badge {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.estado-pendiente {
+    background: linear-gradient(135deg, #ffff00, #ffaa00);
+    color: #000;
+}
+
+.estado-en_proceso, .estado-en-proceso, .estado-proceso {
+    background: linear-gradient(135deg, #00ffff, #0088ff);
+    color: #000;
+}
+
+.estado-completado, .estado-finalizado, .estado-terminado {
+    background: linear-gradient(135deg, #00ff00, #00aa00);
+    color: #000;
+}
+
+.estado-cancelado, .estado-anulado {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: #fff;
+}
+
+/* Indicadores de estado */
+.status-active {
+    color: #00ff00;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+}
+
+.status-inactive {
+    color: #ff4444;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 68, 68, 0.5);
+}
+
+/* Sección de descripción */
+.descripcion-section {
+    background: rgba(42, 42, 42, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border-left: 4px solid #00ffff;
+}
+
+.descripcion-text {
+    color: #ccc;
+    line-height: 1.5;
+    margin: 10px 0 0 0;
+    font-style: italic;
+}
+
+/* Botones */
+.form-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.btn-cancelar, .btn-editar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 30px;
+    border: 2px solid;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1em;
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+.btn-cancelar {
+    background: transparent;
+    color: #ff4444;
+    border-color: #ff4444;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+}
+
+.btn-cancelar:hover {
+    background: #ff4444;
+    color: #000;
+    box-shadow: 0 0 25px #ff4444, 0 0 40px rgba(255, 68, 68, 0.5);
+    transform: translateY(-3px);
+}
+
+.btn-editar {
+    background: transparent;
+    color: #00ffff;
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.btn-editar:hover {
+    background: #00ffff;
+    color: #000;
+    box-shadow: 0 0 25px #00ffff, 0 0 40px rgba(0, 255, 255, 0.5);
+    transform: translateY(-3px);
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 0 35px rgba(0, 255, 255, 0.7);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-cancelar, .btn-editar {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .servicio-details-card {
+        padding: 25px;
+    }
+    
+    .form-header h2 {
+        font-size: 1.8em;
+    }
+}
+</style>
+{% endblock %}

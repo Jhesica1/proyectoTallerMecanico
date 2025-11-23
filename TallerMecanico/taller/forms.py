@@ -2,7 +2,24 @@ from django import forms
 from .models import Cliente
 from django import forms
 from .models import Vehiculo
-from .models import Repuesto     
+from .models import Repuesto   
+from .models import ServicioUsuario
+
+class ServicioUsuarioForm(forms.ModelForm):
+    class Meta:
+        model = ServicioUsuario
+        fields = '__all__'
+        widgets = {
+            'fecha_creacion': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'fecha_entrega': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'estado': forms.TextInput(attrs={'class': 'form-control'}),
+            'total': forms.NumberInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
+            'vehiculo_id': forms.NumberInput(attrs={'class': 'form-control'}),
+            'repuesto_id': forms.NumberInput(attrs={'class': 'form-control'}),
+            'cantidad_repuesto': forms.NumberInput(attrs={'class': 'form-control'}),
+            'repuesto_usado': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }  
 
 class VehiculoForm(forms.ModelForm):
     class Meta:

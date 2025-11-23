@@ -44,3 +44,21 @@ class Repuesto(models.Model):
         return self.nombre
     class Meta:
         db_table = 'repuesto'
+        
+        
+class ServicioUsuario(models.Model):
+    vehiculo_id = models.IntegerField()
+    fecha_creacion = models.DateField()
+    fecha_entrega = models.DateField(null=True, blank=True)
+    estado = models.CharField(max_length=50)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    descripcion = models.TextField(null=True, blank=True)
+    repuesto_usado = models.BooleanField(default=False)
+    repuesto_id = models.IntegerField(null=True, blank=True)
+    cantidad_repuesto = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Servicio #{self.id} - Vehículo {self.vehiculo_id}"
+    
+    class Meta:
+        db_table = 'ordenservicio'

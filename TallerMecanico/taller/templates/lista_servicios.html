@@ -1,0 +1,551 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Operaciones Servicios{% endblock %}
+
+{% block content %}
+<div class="clientes-container">
+    <div class="welcome-section">
+        <div class="section-led-border"></div>
+        
+        <div class="table-header">
+            <h2>🔧 Lista de Operaciones Servicios</h2>
+            <button onclick="window.location.href='{% url 'crear_servicio' %}'" class="btn-nuevo-cliente">
+                <span class="btn-icon">⚡</span>
+                <span class="btn-text">Nuevo Servicio</span>
+                <span class="btn-glow"></span>
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="client-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Vehículo</th>
+                        <th>Estado</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in servicios %}
+                    <tr>
+                        <td>{{ s.id }}</td>
+                        <td>{{ s.vehiculo_id }}</td>
+                        <td>
+                            <span class="estado-badge estado-{{ s.estado|lower }}">
+                                {{ s.estado }}
+                            </span>
+                        </td>
+                        <td>${{ s.total|default:"0.00" }}</td>
+                        <td class="actions-cell">
+                            <a href="{% url 'ver_servicio' s.id %}" class="btn-ver" title="Ver detalles">
+                                <span class="btn-icon">👁️</span>
+                                Ver
+                            </a>
+                            <a href="{% url 'editar_servicio' s.id %}" class="btn-editar" title="Editar servicio">
+                                <span class="btn-icon">✏️</span>
+                                Editar
+                            </a>
+                            <a href="{% url 'eliminar_servicio' s.id %}" class="btn-borrar" title="Eliminar servicio">
+                                <span class="btn-icon">🗑️</span>
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty-message">
+                            <div class="empty-state">
+                                <span class="empty-icon">🔧</span>
+                                <p>No hay servicios registrados.</p>
+                                <button onclick="window.location.href='{% url 'crear_servicio' %}'" class="btn-nuevo-cliente">
+                                    <span class="btn-icon">⚡</span>
+                                    <span class="btn-text">Agregar Primer Servicio</span>
+                                    <span class="btn-glow"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.clientes-container { max-width: 1400px; margin: 0 auto; }
+    
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* BOTÓN NUEVO SERVICIO PREMIUM */
+.btn-nuevo-cliente {
+    position: relative;
+    background: linear-gradient(135deg, #ff00ff, #00ffff, #ffff00);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 12px;
+    color: #000;
+    font-weight: 700;
+    font-size: 1.1em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 
+        0 0 25px rgba(255, 0, 255, 0.6),
+        0 0 50px rgba(0, 255, 255, 0.4),
+        inset 0 0 15px rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: pulse 2s infinite;
+}
+
+.btn-nuevo-cliente::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+    border-radius: 14px;
+    z-index: -1;
+    animation: ledRotate 3s linear infinite;
+    opacity: 0.8;
+}
+
+.btn-nuevo-cliente .btn-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-nuevo-cliente:hover .btn-glow {
+    left: 100%;
+}
+
+.btn-nuevo-cliente:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 
+        0 0 35px rgba(255, 0, 255, 0.8),
+        0 0 70px rgba(0, 255, 255, 0.6),
+        0 0 100px rgba(255, 255, 0, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.5);
+    animation: none;
+}
+
+.btn-nuevo-cliente:active {
+    transform: translateY(-2px) scale(1.02);
+}
+
+.btn-nuevo-cliente .btn-icon {
+    font-size: 1.3em;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+}
+
+.btn-nuevo-cliente .btn-text {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 15px;
+    margin-top: 20px;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+.client-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #1a1a1a;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(255, 0, 255, 0.3);
+    position: relative;
+}
+
+.client-table::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+    border-radius: 17px;
+    z-index: -1;
+    animation: ledGlow 3s linear infinite;
+}
+
+.client-table thead {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a2a);
+    position: relative;
+}
+
+.client-table th {
+    padding: 18px 15px;
+    text-align: left;
+    font-weight: 700;
+    color: #00ffff;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.95em;
+    border-bottom: 3px solid #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+    position: relative;
+    overflow: hidden;
+}
+
+.client-table th::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: #ff00ff;
+    transition: width 0.3s ease;
+}
+
+.client-table th:hover::after {
+    width: 100%;
+}
+
+.client-table td {
+    padding: 16px 15px;
+    color: #e0e0e0;
+    text-align: center;
+    border-bottom: 1px solid #333;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.client-table tbody tr {
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.client-table tbody tr:hover {
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.05));
+    transform: translateX(5px);
+}
+
+.client-table tbody tr:hover td {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.client-table tbody tr:nth-child(even) {
+    background: rgba(40, 40, 40, 0.3);
+}
+
+.client-table tbody tr:nth-child(even):hover {
+    background: linear-gradient(90deg, rgba(0, 255, 255, 0.15), rgba(255, 0, 255, 0.08));
+}
+
+/* BADGES DE ESTADO MEJORADOS */
+.estado-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.estado-pendiente {
+    background: linear-gradient(135deg, #ffff00, #ffaa00);
+    color: #000;
+    box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+}
+
+.estado-en_proceso, .estado-en-proceso, .estado-proceso {
+    background: linear-gradient(135deg, #00ffff, #0088ff);
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+.estado-completado, .estado-finalizado, .estado-terminado {
+    background: linear-gradient(135deg, #00ff00, #00aa00);
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+}
+
+.estado-cancelado, .estado-anulado {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.5);
+}
+
+.actions-cell {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.actions-cell a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 4px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.8em;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.actions-cell a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.actions-cell a:hover::before {
+    left: 100%;
+}
+
+/* NUEVO BOTÓN VER */
+.btn-ver {
+    border-color: #00ff00;
+    color: #00ff00;
+    background: transparent;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.btn-ver:hover {
+    background: #00ff00;
+    color: #000;
+    box-shadow: 0 0 20px #00ff00, 0 0 30px rgba(0, 255, 0, 0.5);
+    transform: translateY(-3px);
+}
+
+.btn-editar {
+    border-color: #00ffff;
+    color: #00ffff;
+    background: transparent;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.btn-editar:hover {
+    background: #00ffff;
+    color: #000;
+    box-shadow: 0 0 20px #00ffff, 0 0 30px rgba(0, 255, 255, 0.5);
+    transform: translateY(-3px);
+}
+
+.btn-borrar {
+    border-color: #ff4444;
+    color: #ff4444;
+    background: transparent;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+}
+
+.btn-borrar:hover {
+    background: #ff4444;
+    color: #000;
+    box-shadow: 0 0 20px #ff4444, 0 0 30px rgba(255, 68, 68, 0.5);
+    transform: translateY(-3px);
+}
+
+.empty-message {
+    text-align: center;
+    padding: 50px 30px;
+    background: linear-gradient(135deg, #2a1a2a, #1a1a2a);
+    border-radius: 15px;
+    border: 2px dashed #ff00ff;
+    position: relative;
+    overflow: hidden;
+}
+
+.empty-message::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+    border-radius: 17px;
+    z-index: -1;
+    animation: ledGlow 3s linear infinite;
+    opacity: 0.3;
+}
+
+.empty-state {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.empty-icon {
+    font-size: 4em;
+    display: block;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.5));
+    animation: float 3s ease-in-out infinite;
+}
+
+.empty-state p {
+    margin-bottom: 25px;
+    font-size: 1.3em;
+    color: #e0e0e0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        box-shadow: 
+            0 0 25px rgba(255, 0, 255, 0.6),
+            0 0 50px rgba(0, 255, 255, 0.4),
+            inset 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+    50% { 
+        box-shadow: 
+            0 0 35px rgba(255, 0, 255, 0.8),
+            0 0 65px rgba(0, 255, 255, 0.6),
+            inset 0 0 20px rgba(255, 255, 255, 0.4);
+    }
+}
+
+@keyframes ledRotate {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes ledGlow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@media (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .client-table {
+        font-size: 0.9em;
+    }
+    
+    .client-table th,
+    .client-table td {
+        padding: 12px 8px;
+    }
+    
+    .actions-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .actions-cell a {
+        display: flex;
+        justify-content: center;
+        margin: 2px 0;
+        padding: 6px 12px;
+        font-size: 0.75em;
+    }
+    
+    .btn-nuevo-cliente {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .estado-badge {
+        font-size: 0.75em;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .actions-cell a {
+        padding: 5px 10px;
+        font-size: 0.7em;
+    }
+    
+    .actions-cell a .btn-icon {
+        font-size: 0.9em;
+    }
+}
+</style>
+
+<script>
+// Agregar tooltips a los botones de acción
+document.addEventListener('DOMContentLoaded', function() {
+    const actionButtons = document.querySelectorAll('.actions-cell a');
+    
+    actionButtons.forEach(button => {
+        const title = button.getAttribute('title');
+        if (title) {
+            button.addEventListener('mouseenter', function(e) {
+                // Crear tooltip
+                const tooltip = document.createElement('div');
+                tooltip.className = 'action-tooltip';
+                tooltip.textContent = title;
+                tooltip.style.cssText = `
+                    position: absolute;
+                    background: rgba(0, 0, 0, 0.8);
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    font-size: 0.8em;
+                    white-space: nowrap;
+                    z-index: 1000;
+                    pointer-events: none;
+                    transform: translateY(-100%);
+                    margin-top: -5px;
+                `;
+                
+                document.body.appendChild(tooltip);
+                
+                // Posicionar tooltip
+                const rect = button.getBoundingClientRect();
+                tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
+                tooltip.style.top = (rect.top - tooltip.offsetHeight) + 'px';
+                
+                button.tooltip = tooltip;
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                if (button.tooltip) {
+                    button.tooltip.remove();
+                    button.tooltip = null;
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

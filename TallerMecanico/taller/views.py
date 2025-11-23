@@ -5,14 +5,56 @@ from .models import Cliente
 from .forms import ClienteForm
 from .models import Repuesto
 from .forms import RepuestoForm
-
-# ------------------ Vehículos ------------------
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Vehiculo
 from .forms import VehiculoForm
+from .models import ServicioUsuario
+from .forms import ServicioUsuarioForm
+
+# LISTAR
+def lista_servicios(request):
+    servicios = ServicioUsuario.objects.all()
+    return render(request, "lista_servicios.html", {"servicios": servicios})
+
+# CREAR
+def crear_servicio(request):
+    if request.method == "POST":
+        form = ServicioUsuarioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_servicios')
+    else:
+        form = ServicioUsuarioForm()
+    return render(request, "crear_servicio.html", {"form": form})
+
+# EDITAR
+def editar_servicio(request, id):
+    servicio = get_object_or_404(ServicioUsuario, id=id)
+    if request.method == "POST":
+        form = ServicioUsuarioForm(request.POST, instance=servicio)
+        if form.is_valid():
+            form.save()
+            return redirect("lista_servicios")
+    else:
+        form = ServicioUsuarioForm(instance=servicio)
+    return render(request, "editar_servicio.html", {"form": form})
+
+# ELIMINAR
+def eliminar_servicio(request, id):
+    servicio = get_object_or_404(ServicioUsuario, id=id)
+    if request.method == "POST":
+        servicio.delete()
+        return redirect("lista_servicios")
+    return render(request, "eliminar_servicio.html", {"servicio": servicio})
+
+def ver_servicio(request, pk):
+    servicio = get_object_or_404(ServicioUsuario, pk=pk)
+    return render(request, 'ver_servicio.html', {'servicio': servicio})
+
+# ------------------ Vehículos ------------------
+
 
 # Vista para listar vehículos
 class ListaVehiculosView(ListView):

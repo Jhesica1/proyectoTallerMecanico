@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Editar Cliente{% endblock %}
+{% block title %}Editar Servicio{% endblock %}
 
 {% block content %}
 <div class="form-container">
@@ -8,9 +8,9 @@
         <div class="section-led-border"></div>
         
         <div class="form-header">
-            <h2>✨ Editar Cliente: {{ cliente.nombre }} {{ cliente.apellido }}</h2>
-            <div class="client-avatar">
-                👤
+            <h2>🔧 Editar Servicio #{{ servicio.id }}</h2>
+            <div class="form-avatar">
+                ⚙️
             </div>
         </div>
 
@@ -18,82 +18,143 @@
             <form method="post" class="led-form">
                 {% csrf_token %}
                 
+                <!-- Mostrar errores del formulario -->
+                {% if form.errors %}
+                <div class="error-message" style="background: #ff4444; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <strong>❌ Errores en el formulario:</strong>
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
                 <div class="form-grid">
+                    <!-- Vehículo ID -->
                     <div class="form-group">
-                        <label for="{{ form.nombre.id_for_label }}" class="form-label">
-                            <span class="label-icon">📛</span>
-                            Nombre
+                        <label for="{{ form.vehiculo_id.id_for_label }}" class="form-label">
+                            <span class="label-icon">🚗</span>
+                            ID Vehículo
                         </label>
-                        {{ form.nombre }}
-                        {% if form.nombre.errors %}
-                        <div class="error-message">{{ form.nombre.errors }}</div>
+                        {{ form.vehiculo_id }}
+                        {% if form.vehiculo_id.errors %}
+                        <div class="error-message">{{ form.vehiculo_id.errors }}</div>
                         {% endif %}
                     </div>
 
+                    <!-- Estado -->
                     <div class="form-group">
-                        <label for="{{ form.apellido.id_for_label }}" class="form-label">
-                            <span class="label-icon">👥</span>
-                            Apellido
+                        <label for="{{ form.estado.id_for_label }}" class="form-label">
+                            <span class="label-icon">📊</span>
+                            Estado
                         </label>
-                        {{ form.apellido }}
-                        {% if form.apellido.errors %}
-                        <div class="error-message">{{ form.apellido.errors }}</div>
+                        {{ form.estado }}
+                        {% if form.estado.errors %}
+                        <div class="error-message">{{ form.estado.errors }}</div>
                         {% endif %}
                     </div>
 
+                    <!-- Fecha Creación -->
                     <div class="form-group">
-                        <label for="{{ form.telefono.id_for_label }}" class="form-label">
-                            <span class="label-icon">📱</span>
-                            Teléfono
+                        <label for="{{ form.fecha_creacion.id_for_label }}" class="form-label">
+                            <span class="label-icon">📅</span>
+                            Fecha Creación
                         </label>
-                        {{ form.telefono }}
-                        {% if form.telefono.errors %}
-                        <div class="error-message">{{ form.telefono.errors }}</div>
+                        {{ form.fecha_creacion }}
+                        {% if form.fecha_creacion.errors %}
+                        <div class="error-message">{{ form.fecha_creacion.errors }}</div>
                         {% endif %}
                     </div>
 
+                    <!-- Fecha Entrega -->
                     <div class="form-group">
-                        <label for="{{ form.email.id_for_label }}" class="form-label">
-                            <span class="label-icon">📧</span>
-                            Email
+                        <label for="{{ form.fecha_entrega.id_for_label }}" class="form-label">
+                            <span class="label-icon">🕒</span>
+                            Fecha Entrega
                         </label>
-                        {{ form.email }}
-                        {% if form.email.errors %}
-                        <div class="error-message">{{ form.email.errors }}</div>
+                        {{ form.fecha_entrega }}
+                        {% if form.fecha_entrega.errors %}
+                        <div class="error-message">{{ form.fecha_entrega.errors }}</div>
                         {% endif %}
                     </div>
                 </div>
 
+                <!-- Descripción -->
                 <div class="form-group full-width">
-                    <label for="{{ form.direccion.id_for_label }}" class="form-label">
-                        <span class="label-icon">🏠</span>
-                        Dirección
+                    <label for="{{ form.descripcion.id_for_label }}" class="form-label">
+                        <span class="label-icon">📝</span>
+                        Descripción
                     </label>
-                    {{ form.direccion }}
-                    {% if form.direccion.errors %}
-                    <div class="error-message">{{ form.direccion.errors }}</div>
+                    {{ form.descripcion }}
+                    {% if form.descripcion.errors %}
+                    <div class="error-message">{{ form.descripcion.errors }}</div>
                     {% endif %}
                 </div>
 
+                <div class="form-grid">
+                    <!-- Total -->
+                    <div class="form-group">
+                        <label for="{{ form.total.id_for_label }}" class="form-label">
+                            <span class="label-icon">💰</span>
+                            Total
+                        </label>
+                        {{ form.total }}
+                        {% if form.total.errors %}
+                        <div class="error-message">{{ form.total.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Repuesto ID -->
+                    <div class="form-group">
+                        <label for="{{ form.repuesto_id.id_for_label }}" class="form-label">
+                            <span class="label-icon">🔩</span>
+                            ID Repuesto
+                        </label>
+                        {{ form.repuesto_id }}
+                        {% if form.repuesto_id.errors %}
+                        <div class="error-message">{{ form.repuesto_id.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Cantidad Repuesto -->
+                    <div class="form-group">
+                        <label for="{{ form.cantidad_repuesto.id_for_label }}" class="form-label">
+                            <span class="label-icon">📦</span>
+                            Cantidad Repuesto
+                        </label>
+                        {{ form.cantidad_repuesto }}
+                        {% if form.cantidad_repuesto.errors %}
+                        <div class="error-message">{{ form.cantidad_repuesto.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Repuesto Usado -->
                 <div class="form-switch">
                     <label class="switch">
-                        {{ form.activo }}
+                        {{ form.repuesto_usado }}
                         <span class="slider"></span>
                     </label>
                     <span class="switch-label">
                         <span class="switch-icon">⚡</span>
-                        Cliente Activo
+                        Repuesto Usado
                     </span>
                 </div>
 
                 <div class="form-actions">
-                    <a href="{% url 'lista_clientes' %}" class="btn-cancelar">
+                    <a href="{% url 'lista_servicios' %}" class="btn-cancelar">
                         <span>↩️</span>
                         Cancelar
                     </a>
                     <button type="submit" class="btn-guardar">
                         <span>💾</span>
-                        Actualizar Cliente
+                        Actualizar Servicio
                     </button>
                 </div>
             </form>
@@ -103,7 +164,7 @@
 
 <style>
 .form-container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -120,9 +181,10 @@
     color: #00ffff;
     text-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
     margin: 0;
+    font-size: 2.2em;
 }
 
-.client-avatar {
+.form-avatar {
     font-size: 3em;
     background: linear-gradient(135deg, #ff00ff, #00ffff);
     border-radius: 50%;
@@ -132,7 +194,7 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
-    animation: float 3s ease-in-out infinite;
+    animation: pulse 2s infinite;
 }
 
 .led-form {
@@ -140,6 +202,7 @@
     padding: 40px;
     border-radius: 20px;
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .form-grid {
@@ -173,6 +236,7 @@
     filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.7));
 }
 
+/* Estilos para todos los campos del formulario */
 .led-form input,
 .led-form textarea,
 .led-form select {
@@ -185,6 +249,7 @@
     font-size: 1em;
     transition: all 0.4s ease;
     backdrop-filter: blur(10px);
+    font-family: inherit;
 }
 
 .led-form input:focus,
@@ -204,7 +269,16 @@
     resize: vertical;
 }
 
-/* Switch personalizado */
+/* Estilos específicos para campos de fecha */
+.led-form input[type="date"] {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2300ffff' viewBox='0 0 24 24'%3E%3Cpath d='M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+}
+
+/* Estilos para checkbox personalizado */
 .form-switch {
     display: flex;
     align-items: center;
@@ -214,6 +288,12 @@
     background: rgba(42, 42, 42, 0.5);
     border-radius: 15px;
     border: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+.form-switch:hover {
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
 }
 
 .switch {
@@ -275,6 +355,7 @@ input:checked + .slider {
     align-items: center;
     gap: 8px;
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    font-size: 1.1em;
 }
 
 .switch-icon {
@@ -343,9 +424,15 @@ input:checked + .slider {
     animation: shake 0.5s ease-in-out;
 }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 0 35px rgba(255, 0, 255, 0.7);
+    }
 }
 
 @keyframes shake {
@@ -376,6 +463,10 @@ input:checked + .slider {
     
     .led-form {
         padding: 25px;
+    }
+    
+    .form-header h2 {
+        font-size: 1.8em;
     }
 }
 </style>
