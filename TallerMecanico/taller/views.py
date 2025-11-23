@@ -6,6 +6,50 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Cliente
 from .forms import ClienteForm
+from .models import Vehiculo
+from .forms import VehiculoForm
+
+
+class VehiculoListView(ListView):
+    model = Vehiculo
+    template_name = 'vehiculos/lista_vehiculos.html'
+    context_object_name = 'vehiculos'
+
+    def get_queryset(self):
+        return Vehiculo.objects.filter(activo=True)
+
+def crear_vehiculo(request):
+    if request.method == 'POST':
+        form = VehiculoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_vehiculos')
+    else:
+        form = VehiculoForm()
+    return render(request, 'vehiculos/crear_vehiculo.html', {'form': form})
+
+def editar_vehiculo(request, pk):
+    vehiculo = get_object_or_404(Vehiculo, pk=pk)
+    if request.method == 'POST':
+        form = VehiculoForm(request.POST, instance=vehiculo)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_vehiculos')
+    else:
+        form = VehiculoForm(instance=vehiculo)
+    return render(request, 'vehiculos/editar_vehiculo.html', {'form': form, 'vehiculo': vehiculo})
+
+class VehiculoDeleteView(DeleteView):
+    model = Vehiculo
+    template_name = 'vehiculos/confirmar_eliminar_vehiculo.html'
+    success_url = reverse_lazy('lista_vehiculos')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.activo = False
+        self.object.save()
+        return redirect(self.success_url)
+
 
 
 class ClienteListView(ListView):

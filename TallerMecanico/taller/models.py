@@ -27,3 +27,15 @@ class Cliente(models.Model):
         db_table = 'cliente'  # Le dices a Django que use esta tabla
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
+
+class Vehiculo(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)  # relacion con Cliente
+    marca = models.CharField(max_length=50)
+    modelo = models.CharField(max_length=50)
+    año = models.IntegerField()
+    placa = models.CharField(max_length=20)
+    color = models.CharField(max_length=30, null=True, blank=True)
+    fecha_registro = models.DateField(auto_now_add=True)
+    activo = models.BooleanField(default=True)
+    def __str__(self):
+        return f"{self.marca} {self.modelo} - {self.placa}"
