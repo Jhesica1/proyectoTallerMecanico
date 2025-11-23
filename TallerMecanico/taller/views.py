@@ -47,7 +47,7 @@ def eliminar_vehiculo(request, pk):
         messages.success(request, 'Vehículo eliminado exitosamente.')
         return redirect('lista_vehiculos')
     
-    return render(request, 'confirma_r_eliminar.html', {'vehiculo': vehiculo})  # ← Cambiado
+    return render(request, 'confirmar_eliminar.html', {'vehiculo': vehiculo})  # ← Cambiado
 
 # Vista para ver detalles del vehículo
 def detalle_vehiculo(request, pk):
